@@ -10,10 +10,6 @@ const passport = require('passport')
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
-app.get('/',(req, res) => {
-    res.render('index')
-})
-
 // 設定body-parser
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -30,6 +26,13 @@ app.use(session({
 // 設定passport
 app.use(passport.initialize())
 app.use(passport.session())
+
+// routes
+app.get('/', (req, res) => {
+    res.send('hello world')
+})
+app.use('/users', require('./routes/user.js'))
+
 
 app.listen(3000, () => {
     console.log('its listenting')
