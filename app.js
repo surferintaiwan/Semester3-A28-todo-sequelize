@@ -6,6 +6,10 @@ const methodOverride = require('method-override')
 const session = require('express-session')
 const passport = require('passport')
 
+const db = require('./models')
+const Todo = db.Todo
+const User = db.User
+
 // 設定handlebars
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
