@@ -5,6 +5,7 @@ const db = require('../models')
 const User = db.User
 
 const passport = require('passport')
+const {authenticated} = require('../config/auth.js')
 
 router.get('/login', (req, res) => {
     res.render('login')

@@ -39,10 +39,9 @@ app.use((req, res, next) => {
 })
 
 // routes
-app.get('/', (req, res) => {
-    res.send('hello world')
-})
+app.use('/', require('./routes/home.js'))
 app.use('/users', require('./routes/user.js'))
+app.use('/todos', require('./routes/todo.js'))
 
 
 app.listen(3000, () => {
