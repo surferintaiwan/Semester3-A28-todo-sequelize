@@ -30,6 +30,13 @@ app.use(session({
 // 設定passport
 app.use(passport.initialize())
 app.use(passport.session())
+require('./config/passport')(passport)
+
+// 儲存變數供view使用
+app.use((req, res, next) => {
+    res.locals.user = req.user
+    next()
+})
 
 // routes
 app.get('/', (req, res) => {
