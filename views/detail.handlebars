@@ -1,0 +1,14 @@
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <div class="input-group-text">
+        <input type="checkbox" disabled {{#if todo.done}}checked{{/if}}>
+      </div>
+    </div>
+    <input type="text" class="form-control" value="{{todo.name}}" disabled>
+    <div class="input-group-append">
+      <a href="/todos/{{todo.id}}/edit" class="btn btn-primary">編輯</a>
+      <form action="/todos/{{todo.id}}?_method=DELETE" method="POST">
+          <button type="submit" class="btn btn-warning">刪除</button>
+      </form>
+    </div>
+</div>

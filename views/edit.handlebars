@@ -1,1 +1,13 @@
-編輯頁面
+<form action="/todos/{{todo.id}}?_method=PUT" method="POST" class="mt-3 ml-3 mr-3">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+                <input type="checkbox" name="done" {{#if todo.done}}checked{{/if}}>
+            </div>
+        </div>
+      <input type="text" name="name" placeholder="輸入待辦事項" class="form-control" value="{{todo.name}}">
+        <div class="input-group-append">
+          <button type="submit" class="btn btn-success">儲存</button>
+      </div>
+    </div>
+</form>

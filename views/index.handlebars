@@ -1,1 +1,21 @@
-Hi!
+<div class="container mt-3">
+  <a href="/todos/new">新增待辦事項</a>
+  {{#each todos}}
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <div class="input-group-text">
+        <input type="checkbox" disabled {{#if this.done}}checked{{/if}}>
+      </div>
+    </div>
+    <input type="text" class="form-control" value="{{this.name}}" disabled>
+    <div class="input-group-append">
+      <a href="/todos/{{this.id}}" class="btn btn-primary">詳細</a>
+      <a href="/todos/{{this.id}}/edit" class="btn btn-primary">編輯</a>
+      <form action="/todos/{{this.id}}?_method=DELETE" method="POST">
+          <button type="submit" class="btn btn-warning">刪除</button>
+      </form>
+    </div>
+  </div>
+
+{{/each}}
+</div>

@@ -7,7 +7,7 @@ const User = db.User
 const {authenticated} = require('../config/auth.js')
 
 router.get('/', authenticated, (req, res) => {
-    res.render('index')
+    res.redirect('/todos')
 })
 
 module.exports = router
