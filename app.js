@@ -10,6 +10,10 @@ const db = require('./models')
 const Todo = db.Todo
 const User = db.User
 
+if (process.env.NODE_ENV !== 'production') {      // 如果不是 production 模式
+    require('dotenv').config()                      // 使用 dotenv 讀取 .env 檔案
+}
+
 // 設定handlebars
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
@@ -43,6 +47,7 @@ app.use((req, res, next) => {
 app.use('/', require('./routes/home.js'))
 app.use('/users', require('./routes/user.js'))
 app.use('/todos', require('./routes/todo.js'))
+app.use('/auth', require('./routes/auth.js'))
 
 
 app.listen(3000, () => {
