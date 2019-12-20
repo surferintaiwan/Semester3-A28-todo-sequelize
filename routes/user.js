@@ -6,7 +6,6 @@ const db = require('../models')
 const User = db.User
 
 const passport = require('passport')
-const {authenticated} = require('../config/auth.js')
 
 const bcrySalt = new Promise((resolve)=>{
     bcrypt.genSalt(10, function(err, salt) {
