@@ -39,18 +39,37 @@ router.get('/register', (req, res) => {
 
 router.post('/register', (req, res) => {
     const {name, email, password, password2} = req.body
-    User.findOne({where:{email:email}})
+    let errors = []
+    if (!name || !email || !password || !password2) {
+        errors.push('所有欄位都是必填的')
+    }
+
+    if (password !== password2) {
+        errors.push('兩次密碼錯誤')
+    }
+
+    if (errors.length > 0) {
+        console.log('有錯')
+        res.render('register', {
+            error_msg: errors,
+            name: name,
+            email: email,
+            password: password,
+            password2: password2
+        })
+    } else {
+        User.findOne({where:{email:email}})
         .then(user => {
             if (user) {
-                console.log('User already exists')
+                errors.push('這個email註冊過了')
                 res.render('register', {
                     name,
                     email,
                     password,
-                    password2
+                    password2,
+                    error_msg: errors
                 })    
             } else {
-                console.log('使用者不存在')
                 bcrySalt
                     .then((salt) => {
                         console.log('hash在這', bcryHash(password, salt))
@@ -70,12 +89,11 @@ router.post('/register', (req, res) => {
                             })
                             .catch(err => console.log(err))
                     })
-            }
-                    
-                    
-                
-                
+            }  
         })
+    }
+    
+    
     /*
     User.create({
         name:req.body.name,
@@ -88,6 +106,7 @@ router.post('/register', (req, res) => {
 // 登出
 router.get('/logout', (req,res) => {
     req.logout()
+    req.flash('success_msg', '您已經登出')
     res.redirect('/users/login')
 })
 
