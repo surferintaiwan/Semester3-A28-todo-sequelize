@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const bcrypt = require('bcryptjs')
 
 const db = require('../models')
 const User = db.User
@@ -7,6 +8,21 @@ const User = db.User
 const passport = require('passport')
 const {authenticated} = require('../config/auth.js')
 
+const bcrySalt = new Promise((resolve)=>{
+    bcrypt.genSalt(10, function(err, salt) {
+        return resolve(salt)
+    })
+})
+
+const bcryHash = (password, salt) => {
+    return new Promise((resolve, reject)=>{
+        bcrypt.hash(password, salt, function(err, hash) {
+            return resolve(hash)
+        })
+    })
+}
+
+// 登入
 router.get('/login', (req, res) => {
     res.render('login')
 })
@@ -17,6 +33,7 @@ router.post('/login', (req, res, next) => {
                                    })(req, res, next)
 })
 
+// 註冊
 router.get('/register', (req, res) => {
     res.render('register')
 })
@@ -34,18 +51,31 @@ router.post('/register', (req, res) => {
                     password2
                 })    
             } else {
-                const newUser = new User({
-                    name,
-                    email,
-                    password
-                })
-                newUser
-                    .save()
-                    .then(user => {
-                        res.redirect('/')
+                console.log('使用者不存在')
+                bcrySalt
+                    .then((salt) => {
+                        console.log('hash在這', bcryHash(password, salt))
+                        return bcryHash(req.body.password, salt)
                     })
-                    .catch(err => console.log(err))
+                    .then((hash) => {
+                        
+                        const newUser = new User({
+                            name,
+                            email,
+                            password: hash
+                        })
+                        newUser
+                            .save()
+                            .then(user => {
+                                res.redirect('/')
+                            })
+                            .catch(err => console.log(err))
+                    })
             }
+                    
+                    
+                
+                
         })
     /*
     User.create({
@@ -56,6 +86,11 @@ router.post('/register', (req, res) => {
     */
 })
 
+// 登出
+router.get('/logout', (req,res) => {
+    req.logout()
+    res.redirect('/users/login')
+})
 
 module.exports = router
 
